@@ -1,6 +1,8 @@
 package com.intuitive.webscraping.utils;
 
 import com.intuitive.webscraping.model.Procedimento;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -9,21 +11,34 @@ import java.util.List;
 
 public class CsvUtils {
 
-    // Método para salvar uma lista de procedimentos em formato CSV
+    private static final Logger logger = LoggerFactory.getLogger(CsvUtils.class);
+    private static final String CSV_HEADER = "Código,Descrição,Valor";
+
+    private CsvUtils() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static void saveProcedimentosToCsv(List<Procedimento> procedimentos, String csvFilePath) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(csvFilePath))) {
-            // Escreve o cabeçalho do CSV
-            writer.write("Código,Descrição,Valor\n");
+            writer.write(CSV_HEADER);
+            writer.newLine();
 
-            // Escreve os dados dos procedimentos
             for (Procedimento procedimento : procedimentos) {
-                writer.write(procedimento.getCodigo() + "," +
-                        procedimento.getDescricao() + "," +
-                        procedimento.getValor() + "\n");
+                writer.write(formatProcedimentoAsCsv(procedimento));
+                writer.newLine();
             }
-            System.out.println("CSV gerado com sucesso em: " + csvFilePath);
+
+            logger.info("CSV gerado com sucesso em: {}", csvFilePath);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Erro ao salvar o CSV: {}", e.getMessage(), e);
         }
+    }
+
+    private static String formatProcedimentoAsCsv(Procedimento procedimento) {
+        return new StringBuilder()
+                .append(procedimento.getCodigo()).append(",")
+                .append(procedimento.getDescricao()).append(",")
+                .append(procedimento.getValor())
+                .toString();
     }
 }

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -29,7 +30,7 @@ public class WebScrapingController {
     private final PdfReaderService pdfReaderService;
 
     @PostConstruct
-    public void init() {
+    public void init() throws IOException {
         logger.info("Iniciando Web Scraping para URL: {}", urlGoverno);
 
         List<String> pdfUrls = webScraperService.extractPdfLinks(urlGoverno);

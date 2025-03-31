@@ -13,7 +13,7 @@ import java.nio.file.Path;
 public class CompressFileService {
 
     private static final Logger logger = LoggerFactory.getLogger(CompressFileService.class);
-    
+
     public void zipFiles(File[] files, String zipFilePath) {
         if (files == null || files.length == 0) {
             logger.warn("Nenhum arquivo disponível para compactação.");
